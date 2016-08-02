@@ -1,0 +1,27 @@
+{
+    "name": "simple-object-schema",
+    "version": "1.0.0",
+    "description": "Simple object schema description and validation",
+    "main": "./src/schema",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "mocha"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ioncreature/simple-object-schema.git"
+    },
+    "keywords": ["simple", "object", "schema", "validate", "validation", "mongoose"],
+    "author": "Alexander Marenin",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ioncreature/simple-object-schema/issues"
+    },
+    "homepage": "https://github.com/ioncreature/simple-object-schema#readme",
+    "dependencies": {},
+    "devDependencies": {
+        "chai": "3.5.0"
+    }
+}

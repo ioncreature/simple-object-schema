@@ -30,12 +30,13 @@ module.exports = class Schema {
 function validateSchema( schema ){
     Object.keys( schema ).forEach( key => {
         if ( !isValid(schema[key]) )
-            throw new Error( `Schema entity ${key} is invalid` );
+            throw new Error( `Schema entity "${key}" is invalid` );
     });
 
     function isValid( value, depth ){
         if ( depth === 0 )
             return false;
+        var d = (depth || DEPTH) - 1;
 
         if ( value instanceof Function )
             return true;
@@ -44,13 +45,13 @@ function validateSchema( schema ){
             return true;
 
         if ( Array.isArray(value) )
-            return value[0] ? isValid( value[0] ) : true;
+            return value[0] ? isValid( value[0], d ) : true;
 
         if ( isTypeDescription(value) )
             return true;
 
         if ( isObjectDescription(value) )
-            return isValid( value, (depth || DEPTH) - 1 );
+            return Object.keys( value ).every( key => isValid(value[key], d) );
     }
 }
 

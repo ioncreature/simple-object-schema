@@ -1,5 +1,5 @@
 {
-    "name": "simple-object-schema-validation",
+    "name": "object-schema-validation",
     "version": "1.0.0",
     "description": "Simple object schema description and validation",
     "main": "./src/schema",

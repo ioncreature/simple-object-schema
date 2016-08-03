@@ -1,10 +1,37 @@
-# simple-object-schema
+# object-schema-validation
 
 Simple object schema description and validation
 
+
+Simple Usage
+============
+
+```js
+
+const Schema = require( 'object-schema-validation' );
+
+var someSchema = new Schema({
+        name: String, 
+        age: Number
+    }),
+    validation = someSchema.validate({
+        name: 'Johny', 
+        age: 88
+    });
+
+if ( validation.valid )
+    console.log( 'yay, its valid' );
+else
+    console.warn( 'oh, no! It invalid', validation.error );
+
+```
+
+Available types
+===============
+
 ```js
     
-    var userSchema = Schema({
+    var userSchema = new Schema({
         age: Number,
         name: String,
         birthDate: Date,
@@ -14,29 +41,17 @@ Simple object schema description and validation
         weight: {type: Number, min: 30, max: 300},
         meta: {
             la: Number,
-            lalala: {type: Date}
+            lalala: {type: Date},
+            blabla: {
+                list: [String],
+                isTrue: Boolean
+            }
         },
         complicated: function( val ){
             return Math.random() * 2 | 0;
         }
     })
-    
-    
-    var user = {
-        age: 10,
-        name: 'Joe',
-        birthDate: '2010-10-20',
-        about: 'its a boy',
-        friends: [],
-        posts: [
-            {text: 'hey', at: '2016-10-20'},
-            {text: 'yay', at: '2016-10-20'}
-        ],
-        weight: 120,
-        meta: {la: 1, lalala: 'yep'},
-        complicated: 'wow'
-    }
-    
-    userSchema.validate( user ); // returns true or false or throws exception?
+        
+    userSchema.validate( user ); // returns {valid: Boolean, error?: Error}
 
 ```

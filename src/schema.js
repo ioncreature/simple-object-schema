@@ -17,12 +17,13 @@ module.exports = class Schema {
 
     validate( object ){
         if ( !(object instanceof Object) )
-            throw new Error( 'Argument should be an object' );
+            return {valid: false, error: new Error('Argument should be an object')};
 
-        Object.keys( this.schema ).forEach( key => {
-            var value = this.schema[value];
-            // if ( !isValidValue() )
-        });
+        for ( let key in this.schema )
+            if ( this.schema.hasOwnProperty(key) )
+                if ( !isValidValue(this.schema[key], object[key]) )
+                    return {valid: false, field: key, error: new Error(`Invalid value at field "${key}"`)};
+        return {valid: true};
     }
 };
 
@@ -60,11 +61,13 @@ function isValidValue( spec, value, depth ){
     if ( depth <= 0 )
         return false;
 
-    if ( typeof spec === 'function' )
-        return spec( value );
+    var d = (depth || DEPTH) - 1;
 
     if ( isStandardType(spec) )
         return isValidByType( spec, value );
+
+    if ( typeof spec === 'function' )
+        return spec( value );
 
     if ( Array.isArray(spec) ){
         if ( spec.length === 0 )
@@ -87,7 +90,13 @@ function isValidValue( spec, value, depth ){
         return isValidByTypeDescription( spec, value );
 
     if ( isObjectDescription(spec) )
-        return Object.keys( spec ).every( key => isValidValue(spec[key], value, depth - 1) );
+        return Object.keys( spec ).every( key => isValidValue(spec[key], value, d) );
+}
+
+
+function isValidByTypeDescription( spec, value ){
+    // todo: add parameters to validation
+    return isValidByType( spec.type, value );
 }
 
 

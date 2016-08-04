@@ -1,6 +1,6 @@
 {
     "name": "object-schema-validation",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Simple object schema description and validation",
     "main": "./src/schema",
     "directories": {

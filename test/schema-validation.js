@@ -16,7 +16,7 @@ describe( 'Schema validation', function(){
 
 
     it( 'should not create schema (deep nesting)', function(){
-        var schema = {meta: {info: {data: {important: Boolean}}}};
+        var schema = {meta: {info: {data: {important: {thing: Boolean}}}}};
         expect( () => new Schema(schema) ).to.throw( /meta/ );
     });
 

@@ -4,8 +4,8 @@
  */
 
 const
-    DEPTH = 3,
-    STANDARD_TYPES = [Boolean, Number, String, Array, Object, Date];
+    DEPTH = 4,
+    STANDARD_TYPES = [Boolean, Number, String, Array, Object, Date, Function];
 
 
 module.exports = class Schema {
@@ -39,10 +39,10 @@ function validateSchema( schema ){
             return false;
         var d = (depth || DEPTH) - 1;
 
-        if ( value instanceof Function )
+        if ( isStandardType(value) )
             return true;
 
-        if ( isStandardType(value) )
+        if ( value instanceof Function )
             return true;
 
         if ( Array.isArray(value) )
@@ -70,18 +70,24 @@ function isValidValue( spec, value, depth ){
         return spec( value );
 
     if ( Array.isArray(spec) ){
+        let sp = spec[0];
+
+        if ( !Array.isArray(value) )
+            return false;
+
         if ( spec.length === 0 )
             return Array.isArray( value );
 
-        if ( isStandardType(spec[0]) )
-            return value.every( val => isValidByType(spec[0], val) );
+        if ( isStandardType(sp) )
+            return value.every( val => isValidByType(sp, val) );
 
-        if ( isTypeDescription(spec[0]) )
-            return value.every( val => isValidByTypeDescription(spec[0], val) );
+        if ( isTypeDescription(sp) )
+            return value.every( val => isValidByTypeDescription(sp, val) );
 
-        if ( isObjectDescription(spec[0]) )
-        // return Object.keys( spec[0] ).every();
-            return value.everyObject.keys( spec[0] ).every();
+        if ( isObjectDescription(sp) )
+            return value.every( item => {
+                return isObject( item ) && Object.keys( sp ).every( key => isValidValue(sp[key], item[key], d) )
+            });
 
         return false;
     }
@@ -90,7 +96,7 @@ function isValidValue( spec, value, depth ){
         return isValidByTypeDescription( spec, value );
 
     if ( isObjectDescription(spec) )
-        return Object.keys( spec ).every( key => isValidValue(spec[key], value, d) );
+        return isObject( value ) && Object.keys( spec ).every( key => isValidValue(spec[key], value[key], d) );
 }
 
 
@@ -120,7 +126,7 @@ function isValidByType( type, value ){
         return typeof value === 'number';
 
     if ( type === Object )
-        return value !== null && typeof value == 'object';
+        return isObject( value );
 
     if ( type === String )
         return typeof value == 'string' || value instanceof String;
@@ -133,10 +139,18 @@ function isValidByType( type, value ){
 
     if ( type === Date )
         return isDate( value );
+
+    if ( type === Function )
+        return value instanceof Function;
 }
 
 
 function isDate( value ){
     var date = new Date( value );
     return !isNaN( date.getTime() );
+}
+
+
+function isObject( value ){
+    return value !== null && typeof value == 'object' && !(value instanceof Array);
 }

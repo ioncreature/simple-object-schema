@@ -3,6 +3,8 @@
  * @author Alexander Marenin
  */
 
+'use strict';
+
 const
     DEPTH = 4,
     STANDARD_TYPES = [Boolean, Number, String, Array, Object, Date, Function];

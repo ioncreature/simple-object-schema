@@ -35,10 +35,10 @@ Available types
         age: Number,
         name: String,
         birthDate: Date,
-        about: {type: String, max: 100500},
+        about: {type: String, max: 100500, required: true},
         friends: [Number],
         posts: [{text: String, at: Date}],
-        weight: {type: Number, min: 30, max: 300},
+        weight: {type: Number, min: 30, max: 300, required: true},
         meta: {
             la: Number,
             lalala: {type: Date},

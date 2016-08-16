@@ -27,18 +27,41 @@ describe( 'Object validation', function(){
         });
 
 
+        it( 'should validate number if not passed (by constructor)', function(){
+            var schema = new Schema( {n: Number} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
+        it( 'should validate number if not passed (by description)', function(){
+            var schema = new Schema( {n: {type: Number}} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
+        it( 'should validate number if not passed and required=false (by description)', function(){
+            var schema = new Schema( {n: {type: Number, required: false}} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
         it( 'should fail number (by constructor)', function(){
             var schema = new Schema( {n: Number} );
             expect( schema.validate({n: false}).valid ).to.be.false;
             expect( schema.validate({n: []}).valid ).to.be.false;
             expect( schema.validate({n: null}).valid ).to.be.false;
-            expect( schema.validate({}).valid ).to.be.false;
         });
 
 
         it( 'should fail number (by description)', function(){
             var schema = new Schema( {n: {type: Number}} );
             expect( schema.validate({n: 'no'}).valid ).to.be.false;
+        });
+
+
+        it( 'should fail number if required and not passed(by description)', function(){
+            var schema = new Schema( {n: {type: Number, required: true}} );
+            expect( schema.validate({}).valid ).to.be.false;
         });
     });
 
@@ -56,18 +79,41 @@ describe( 'Object validation', function(){
         });
 
 
+        it( 'should validate string if not passed (by constructor)', function(){
+            var schema = new Schema( {s: String} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
+        it( 'should validate string if not passed (by description)', function(){
+            var schema = new Schema( {s: {type: String}} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
+        it( 'should validate string if not passed and required=false (by description)', function(){
+            var schema = new Schema( {s: {type: String, required: false}} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
         it( 'should fail string (by constructor)', function(){
             var schema = new Schema( {s: String} );
             expect( schema.validate({s: 123}).valid ).to.be.false;
             expect( schema.validate({s: []}).valid ).to.be.false;
             expect( schema.validate({s: {}}).valid ).to.be.false;
-            expect( schema.validate({}).valid ).to.be.false;
         });
 
 
         it( 'should fail string (by description)', function(){
-            var schema = new Schema( {num: {type: String}} );
+            var schema = new Schema( {s: {type: String}} );
             expect( schema.validate({s: null}).valid ).to.be.false;
+        });
+
+
+        it( 'should fail number if required and not passed(by description)', function(){
+            var schema = new Schema( {s: {type: String, required: true}} );
+            expect( schema.validate({}).valid ).to.be.false;
         });
     });
 
@@ -85,17 +131,40 @@ describe( 'Object validation', function(){
         });
 
 
+        it( 'should validate boolean if not passed (by constructor)', function(){
+            var schema = new Schema( {b: Boolean} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
+        it( 'should validate boolean if not passed (by description)', function(){
+            var schema = new Schema( {b: {type: Boolean}} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
+        it( 'should validate boolean if not passed and required=false (by description)', function(){
+            var schema = new Schema( {b: {type: Boolean, required: false}} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
         it( 'should fail boolean (by constructor)', function(){
             var schema = new Schema( {b: Boolean} );
             expect( schema.validate({b: 1}).valid ).to.be.false;
             expect( schema.validate({b: {}}).valid ).to.be.false;
-            expect( schema.validate({}).valid ).to.be.false;
         });
 
 
         it( 'should fail boolean (by description)', function(){
             var schema = new Schema( {b: {type: Boolean}} );
-            expect( schema.validate({b: undefined}).valid ).to.be.false;
+            expect( schema.validate({b: null}).valid ).to.be.false;
+        });
+
+
+        it( 'should fail boolean if required and not passed(by description)', function(){
+            var schema = new Schema( {b: {type: Boolean, required: true}} );
+            expect( schema.validate({}).valid ).to.be.false;
         });
     });
 
@@ -114,6 +183,24 @@ describe( 'Object validation', function(){
         });
 
 
+        it( 'should validate date if not passed (by constructor)', function(){
+            var schema = new Schema( {d: Date} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
+        it( 'should validate date if not passed (by description)', function(){
+            var schema = new Schema( {d: {type: Date}} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
+        it( 'should validate date if not passed and required=false (by description)', function(){
+            var schema = new Schema( {d: {type: Date, required: false}} );
+            expect( schema.validate({}).valid ).to.be.true;
+        });
+
+
         it( 'should fail date (by constructor)', function(){
             var schema = new Schema( {d: Date} );
             expect( schema.validate({d: 'bla-bla-bla, mr. Freeman'}).valid ).to.be.false;
@@ -124,6 +211,12 @@ describe( 'Object validation', function(){
 
         it( 'should fail date (by description)', function(){
             var schema = new Schema( {d: {type: Date}} );
+            expect( schema.validate({d: 'null'}).valid ).to.be.false;
+        });
+
+
+        it( 'should fail date if required and not passed(by description)', function(){
+            var schema = new Schema( {d: {type: Date, required: true}} );
             expect( schema.validate({}).valid ).to.be.false;
         });
     });
@@ -145,7 +238,6 @@ describe( 'Object validation', function(){
             expect( schema.validate({a: 123}).valid ).to.be.false;
             expect( schema.validate({a: false}).valid ).to.be.false;
             expect( schema.validate({a: null}).valid ).to.be.false;
-            expect( schema.validate({}).valid ).to.be.false;
         });
     });
 
@@ -165,7 +257,6 @@ describe( 'Object validation', function(){
             expect( schema.validate({o: 123}).valid ).to.be.false;
             expect( schema.validate({o: false}).valid ).to.be.false;
             expect( schema.validate({o: null}).valid ).to.be.false;
-            expect( schema.validate({}).valid ).to.be.false;
         });
     });
 
@@ -186,7 +277,6 @@ describe( 'Object validation', function(){
             expect( schema.validate({f: 123}).valid ).to.be.false;
             expect( schema.validate({f: false}).valid ).to.be.false;
             expect( schema.validate({f: null}).valid ).to.be.false;
-            expect( schema.validate({}).valid ).to.be.false;
         });
     });
 
@@ -282,18 +372,18 @@ describe( 'Object validation', function(){
                 {n: 5, s: '123', b: false}
             ]}).valid ).to.be.true;
 
-            expect( schema.validate({c: [{}]}).valid ).to.be.false;
+            expect( schema.validate({c: [{n: 's', s: 1, b: 0}]}).valid ).to.be.false;
             expect( schema.validate({c: [{n: 1, s: '', b: !0}]}).valid ).to.be.true;
-            expect( schema.validate({c: [{n: 5, o: null}]}).valid ).to.be.false;
+            expect( schema.validate({c: [{n: 5, o: null}]}).valid ).to.be.true;
         });
 
 
         it( 'should validate collection by nested object description', function(){
-            var schema = new Schema( {c: [{n: Number, o: {s: String, b: Boolean}}]} );
+            var schema = new Schema( {c: [{n: {type: Number, required: true}, o: {s: String, b: Boolean}}]} );
             expect( schema.validate({c: [{n: 1, o: {s: '', b: !0}}]}).valid ).to.be.true;
 
             expect( schema.validate({c: [{n: '', o: {s: '', b: !0}}]}).valid ).to.be.false;
-            expect( schema.validate({c: [{n: 5, o: null}]}).valid ).to.be.false;
+            expect( schema.validate({c: [{o: null}]}).valid ).to.be.false;
         });
     });
 });

@@ -18,7 +18,7 @@ module.exports = class Schema {
 
 
     validate( object ){
-        if ( !(object instanceof Object) )
+        if ( !(object instanceof Object) || Array.isArray(object) )
             return {valid: false, error: new Error('Argument should be an object')};
 
         for ( let key in this.schema )
@@ -98,12 +98,14 @@ function isValidValue( spec, value, depth ){
         return isValidByTypeDescription( spec, value );
 
     if ( isObjectDescription(spec) )
-        return isObject( value ) && Object.keys( spec ).every( key => isValidValue(spec[key], value[key], d) );
+        return Object.keys( spec ).every( key => isValidValue(spec[key], isObject(value) ? value[key] : undefined, d) );
 }
 
 
 function isValidByTypeDescription( spec, value ){
-    // todo: add parameters to validation
+    if ( typeof value === 'undefined' )
+        return !spec.required;
+
     return isValidByType( spec.type, value );
 }
 
@@ -124,6 +126,9 @@ function isStandardType( value ){
 
 
 function isValidByType( type, value ){
+    if ( typeof value === 'undefined' )
+        return true;
+
     if ( type === Number )
         return typeof value === 'number';
 

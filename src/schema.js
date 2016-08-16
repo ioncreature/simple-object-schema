@@ -6,7 +6,7 @@
 'use strict';
 
 const
-    DEPTH = 4,
+    DEPTH = 7,
     STANDARD_TYPES = [Boolean, Number, String, Array, Object, Date, Function];
 
 
